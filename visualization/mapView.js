@@ -31,12 +31,24 @@ var pathToCsv = "../data/heart_2022_with_nans.csv.zip";
 var colorArray = [d3.schemeCategory10, d3.schemeAccent];
 var colorScheme = d3.scaleOrdinal(colorArray[0]);
 
-d3.dsv(",", pathToCsv, function (d) {
-    return {
-      // format data attributes if required
-      
-        }
-    }).then(function (data) {
-    console.log(data);
-    })
-// const data = d3.csv(pathToCsv);
+// load data
+fetch(pathToCsv)
+  .then(response => {
+    if (response.status === 200 || response.status === 0) {
+      return response.arrayBuffer();
+    }
+    throw new Error('Could not retrieve the zip file.');
+  })
+  .then(JSZip.loadAsync)
+  .then(zip => {
+    const csvFileName = Object.keys(zip.files).find(fileName => fileName.endsWith('.csv'));
+    if (csvFileName) {
+      return zip.file(csvFileName).async("string"); // Extract CSV file content as a string
+    }
+    throw new Error('CSV file not found in zip.');
+  })
+  .then(csvContent => {
+    const data = d3.csvParse(csvContent);
+    console.log(data); 
+  })
+  .catch(err => console.error(err));

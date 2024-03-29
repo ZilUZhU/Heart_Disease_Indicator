@@ -26,29 +26,14 @@ let svg = d3
     "translate(" + margin.left + "," + margin.top + ")");
 
 // Fetch the data
-var pathToCsv = "../data/heart_2022_with_nans.csv.zip";
+var pathToCsv = "heart_2022_with_nans.csv";
 
 var colorArray = [d3.schemeCategory10, d3.schemeAccent];
 var colorScheme = d3.scaleOrdinal(colorArray[0]);
 
 // load data
-fetch(pathToCsv)
-  .then(response => {
-    if (response.status === 200 || response.status === 0) {
-      return response.arrayBuffer();
-    }
-    throw new Error('Could not retrieve the zip file.');
-  })
-  .then(JSZip.loadAsync)
-  .then(zip => {
-    const csvFileName = Object.keys(zip.files).find(fileName => fileName.endsWith('.csv'));
-    if (csvFileName) {
-      return zip.file(csvFileName).async("string"); // Extract CSV file content as a string
-    }
-    throw new Error('CSV file not found in zip.');
-  })
-  .then(csvContent => {
-    const data = d3.csvParse(csvContent);
-    console.log(data); 
-  })
-  .catch(err => console.error(err));
+d3.csv(pathToCsv).then(function(data) {
+    console.log(data); // Log the loaded data
+}).catch(function(error) {
+    console.error('Error loading the CSV file:', error);
+});

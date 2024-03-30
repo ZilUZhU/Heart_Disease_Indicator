@@ -3,11 +3,7 @@ var margin = {top: 50, right: 50, bottom: 50, left: 80},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-// Aesthetic Configurations
-var colorArray = [d3.schemeCategory10, d3.schemeAccent];
-var colorScheme = d3.scaleOrdinal(colorArray[0]);
-
-// Append the SVG object body
+// Append the SVG object to the body of the page
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -16,8 +12,8 @@ var svg = d3.select("body").append("svg")
 
 // Define the projection
 var projection = d3.geoAlbersUsa()
-    .translate([width / 2, height / 2]) // Center the map
-    .scale([1000]); // Scale to fit
+    .translate([width / 2, height / 2])
+    .scale(1000);
 
 // Define the path generator
 var path = d3.geoPath()
@@ -34,21 +30,49 @@ var tooltip = d3.select("body").append("div")
     .style("border-radius", "5px")
     .style("pointer-events", "none");
 
-// Load and display the GeoJSON data
-d3.json("us-states.json").then(function(geoJsonData) {
+// Load external data simultaneously
+Promise.all([
+    d3.json("us-states.json"), // Adjust path as needed
+    d3.csv("heart_2022_with_nans.csv") // Adjust path as needed
+]).then(function([us, healthData]) {
+    // Process heart attack data
+    var heartAttackRates = {};
+    healthData.forEach(function(d) {
+        if (!heartAttackRates[d.State]) heartAttackRates[d.State] = { yes: 0, total: 0 };
+        heartAttackRates[d.State].total += 1;
+        if (d.HadHeartAttack === "Yes") heartAttackRates[d.State].yes += 1;
+    });
+
+    // Calculate percentages
+    Object.keys(heartAttackRates).forEach(function(State) {
+        var rate = heartAttackRates[State];
+        rate.percentage = (rate.yes / rate.total) * 100;
+    });
+
+    // Define color scale
+    var colorScale = d3.scaleSequential(d3.interpolateReds)
+        .domain([0, d3.max(Object.values(heartAttackRates), d => d.percentage)]);
+
+    // Display the map
     svg.selectAll("path")
-        .data(geoJsonData.features)
+        .data(us.features)
         .enter().append("path")
         .attr("d", path)
-        .style("fill", "steelblue")
+        .style("fill", function(d) {
+            var state = d.properties.name;
+            var rate = heartAttackRates[state];
+            return rate ? colorScale(rate.percentage) : "#ccc";
+        })
         .style("stroke", "white")
         .style("stroke-width", "1")
-        // Mouse events
         .on("mouseover", function(d) {
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            tooltip.html(d.properties.name) // Use the name property from your GeoJSON data
+            var state = d.properties.name;
+            var rate = heartAttackRates[state];
+            var text = state + "<br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data");
+            tooltip.html(text)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -58,15 +82,5 @@ d3.json("us-states.json").then(function(geoJsonData) {
                 .style("opacity", 0);
         });
 }).catch(function(error) {
-    console.error("Error loading the GeoJSON data:", error);
-});
-
-// Fetch the data (Cleaned Data)
-var pathToCsv = "heart_2022_with_nans.csv";
-
-// Load data
-d3.csv(pathToCsv).then(function(data) {
-    console.log(data); // Log the loaded data
-}).catch(function(error) {
-    console.error('Error loading the CSV file:', error);
+    console.error("Error loading or processing data:", error);
 });

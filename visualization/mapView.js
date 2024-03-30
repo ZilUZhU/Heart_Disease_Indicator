@@ -1,87 +1,86 @@
-    // Define margins and dimensions
-    const margin = { top: 50, right: 50, bottom: 50, left: 80 },
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
+// Dimensions and margins for the map
+var margin = {top: 50, right: 50, bottom: 50, left: 80},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-    // Append SVG to the body
-    const svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+// Append the SVG object to the body of the page
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Define the map projection
-    const projection = d3.geoAlbersUsa()
-        .translate([width / 2, height / 2])
-        .scale([1000]);
+// Define the projection
+var projection = d3.geoAlbersUsa()
+    .translate([width / 2, height / 2])
+    .scale(1000);
 
-    // Define path generator
-    const path = d3.geoPath()
-        .projection(projection);
+// Define the path generator
+var path = d3.geoPath()
+    .projection(projection);
 
-    // Define the tooltip
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+// Define the tooltip
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("opacity", 0)
+    .style("background-color", "#fff")
+    .style("border", "1px solid #000")
+    .style("padding", "10px")
+    .style("border-radius", "5px")
+    .style("pointer-events", "none");
 
-    // Load the data
-    d3.queue()
-        .defer(d3.json, "us-states.json")
-        .defer(d3.csv, "cleaned_heart_2022.csv")
-        .await(ready);
+// Load external data simultaneously
+Promise.all([
+    d3.json("us-states.json"), // Adjust path as needed
+    d3.csv("heart_2022_with_nans.csv") // Adjust path as needed
+]).then(function([us, healthData]) {
+    // Process heart attack data
+    var heartAttackRates = {};
+    healthData.forEach(function(d) {
+        if (!heartAttackRates[d.State]) heartAttackRates[d.State] = { yes: 0, total: 0 };
+        heartAttackRates[d.State].total += 1;
+        if (d.HadHeartAttack === "Yes") heartAttackRates[d.State].yes += 1;
+    });
 
-    function ready(error, us, data) {
-        if (error) throw error;
+    // Calculate percentages
+    Object.keys(heartAttackRates).forEach(function(State) {
+        var rate = heartAttackRates[State];
+        rate.percentage = (rate.yes / rate.total) * 100;
+    });
 
-        // Process heart data
-        const heartAttackCounts = {};
-        data.forEach(d => {
-            if (!heartAttackCounts[d.state]) {
-                heartAttackCounts[d.state] = { total: 0, yes: 0 };
-            }
-            heartAttackCounts[d.state].total++;
-            if (d.HadHeartAttack === "Yes") {
-                heartAttackCounts[d.state].yes++;
-            }
+    // Define color scale
+    var colorScale = d3.scaleSequential(d3.interpolateReds)
+        .domain([0, d3.max(Object.values(heartAttackRates), d => d.percentage)]);
+
+    // Display the map
+    svg.selectAll("path")
+        .data(us.features)
+        .enter().append("path")
+        .attr("d", path)
+        .style("fill", function(d) {
+            var state = d.properties.name;
+            var rate = heartAttackRates[state];
+            return rate ? colorScale(rate.percentage) : "#ccc";
+        })
+        .style("stroke", "white")
+        .style("stroke-width", "1")
+        .on("mouseover", function(d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            var state = d.properties.name;
+            var rate = heartAttackRates[state];
+            var text = state + "<br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data");
+            tooltip.html(text)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
-
-        const heartAttackPercentages = {};
-        Object.keys(heartAttackCounts).forEach(state => {
-            const data = heartAttackCounts[state];
-            heartAttackPercentages[state] = (data.yes / data.total) * 100;
-        });
-
-        // Define a color scale
-        const colorScale = d3.scaleSequential(function(t) {
-    // Using a custom function to interpolate between two shades of red
-    return d3.interpolateRgb("lightpink", "darkred")(t);
-}).domain([0, d3.max(Object.values(heartAttackPercentages))]);
-
-        // Draw each state with color based on heart attack percentages
-        svg.selectAll(".state")
-            .data(us.features)
-            .enter().append("path")
-            .attr("class", "state")
-            .attr("d", path)
-            .style("fill", d => {
-                const stateName = d.properties.name;
-                const percentage = heartAttackPercentages[stateName] || 0;
-                return colorScale(percentage / 100);
-            })
-            .style("stroke", "#fff")
-            .on("mouseover", function(d) {
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                const stateName = d.properties.name;
-                const heartAttackInfo = heartAttackPercentages[stateName] ? heartAttackPercentages[stateName].toFixed(2) + "%" : "No data";
-                tooltip.html(`${stateName}<br/>Heart Attack Prevalence: ${heartAttackInfo}`)
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-            .on("mouseout", function(d) {
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
-    }
+}).catch(function(error) {
+    console.error("Error loading or processing data:", error);
+});

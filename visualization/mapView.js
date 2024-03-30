@@ -33,7 +33,7 @@ var tooltip = d3.select("body").append("div")
 // Load external data simultaneously
 Promise.all([
     d3.json("us-states.json"), // Adjust path as needed
-    d3.csv("heart_2022_with_nans.csv") // Adjust path as needed
+    d3.csv("cleaned_heart_2022.csv") // Adjust path as needed
 ]).then(function([us, healthData]) {
     // Process heart attack data
     var heartAttackRates = {};

@@ -1,4 +1,3 @@
-
     // Define margins and dimensions
     const margin = { top: 50, right: 50, bottom: 50, left: 80 },
           width = 960 - margin.left - margin.right,
@@ -27,8 +26,8 @@
 
     // Load the data
     d3.queue()
-        .defer(d3.json, "us-states.json") // Adjust with the path to your GeoJSON
-        .defer(d3.csv, "cleaned_heart_2022.csv") // Adjust with the path to your CSV
+        .defer(d3.json, "us-states.json")
+        .defer(d3.csv, "cleaned_heart_2022.csv")
         .await(ready);
 
     function ready(error, us, data) {

@@ -49,6 +49,21 @@ Promise.all([
         rate.percentage = (rate.yes / rate.total) * 100;
     });
 
+    const groupedData = d3.group(healthData, d => d.State);
+
+    const averageSleepByState = Array.from(groupedData, ([state, values]) => {
+      const average = d3.mean(values, d => d.SleepHours);
+      return { State: state, AverageSleepHours: average };
+    });
+    const averageValueByState = Array.from(groupedData, ([state, values]) => {
+      const avgSleepHours = d3.mean(values, d => d.SleepHours);
+      return { State: state, 
+              AverageSleepHours: avgSleepHours, 
+              AverageBMI: d3.mean(values, d => d.BMI)
+             };
+    });
+
+
     // Define color scale
     var colorScale = d3.scaleSequential(d3.interpolateReds)
         .domain([0, d3.max(Object.values(heartAttackRates), d => d.percentage)]);
@@ -71,7 +86,16 @@ Promise.all([
                 .style("opacity", .9);
             var state = d.properties.name;
             var rate = heartAttackRates[state];
-            var text = state + "<br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data");
+            var stateVal = averageValueByState.find(item => item.State === state)
+            var sleepHour = stateVal.AverageSleepHours.toFixed(2)
+            var avgBMI = stateVal.AverageBMI.toFixed(2)
+            var text = state + "<br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data")
+                        + (d3.select('#SleepHours').property('checked') ? "<br> Average Sleep Hours: " + sleepHour: "")  // add checkbox options
+                        + (d3.select('#BMI').property('checked') ? "<br> Average BMI: " + avgBMI: "") 
+                        ;
+
+            
+            
             tooltip.html(text)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");

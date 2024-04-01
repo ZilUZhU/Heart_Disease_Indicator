@@ -12,7 +12,15 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
     <script type="text/javascript" src="mapView.js"></script>
-    <div id="tooltip" style="position: absolute; opacity: 0; background-color: #fff; border: 1px solid #000; padding: 10px; border-radius: 5px; pointer-events: none;"></div>
-    
+    <!-- <div id="tooltip" style="position: absolute; opacity: 0; background-color: #fff; border: 1px solid #000; padding: 10px; border-radius: 5px; pointer-events: none;"></div> -->
+    <div>
+        <input type="checkbox" id="SleepHours" name="SleepHours" />
+        <label for="SleepHours">Sleep Hours</label>
+        <input type="checkbox" id="BMI" name="BMI" />
+        <label for="BMI">BMI</label>
+    </div>
+    <div id="formContainer" class="flex-container"></div>
+    <script src="modelVisual.js"></script>
 </body>

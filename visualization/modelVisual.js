@@ -2,7 +2,7 @@ var formContainer = document.getElementById('formContainer');
 
 // Create the form element
 var form = document.createElement('form')
-// form.setAttribute('method', 'post')
+// form.setAttribute('method', 'get')
 
 function addField (form, name, type = "text", placeholder = '') {
     var input = document.createElement('input')
@@ -74,7 +74,7 @@ function createStyledLabel(forInput, textContent) {
 }
 
 // Add a section for single choice input
-const questionLabel = createStyledLabel('', 'What is your general health status?');
+const questionLabel = createStyledLabel('genhealth', 'What is your general health status?');
 questionLabel.style.fontWeight = 'bold';
 form.appendChild(questionLabel);
 
@@ -97,6 +97,8 @@ options.forEach(option => {
 // sleep time
 
 // asthma
+const asthmaLabel = createStyledLabel('', 'Have you had asthma?');
+asthmaLabel.style.fontWeight = 'bold';
 
 // kidney disease
 
@@ -119,6 +121,20 @@ BMILabel.textContent = 'BMI: ';
 var submitButton = document.createElement('input');
 submitButton.setAttribute('type', 'submit');
 submitButton.setAttribute('value', 'Submit');
+// submitButton.addEventListener('click', function() {
+//     // TODO: send to backend
+//     console.log('submit');
+//     const formData = new FormData(form);
+//     const values = {};
+//     for (let [key, value] of formData.entries()) {
+//         values[key] = value;
+//     }
+
+//     // Log all form values
+//     console.log(values);
+// });
+
+
 
 // Append the input fields and the submit button to the form
 form.appendChild(BMILabel);
@@ -129,3 +145,23 @@ form.appendChild(submitButton);
 
 // Finally, append the form to the container
 formContainer.appendChild(form);
+
+document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the traditional form submission
+
+    // Optionally validate the form data here
+    const formData = new FormData(this);
+
+    // TODO: send data to backend
+    // fetch('submitForm.php', {
+    //     method: 'POST',
+    //     body: formData
+    // })
+    // .then(response => response.text()) // Or response.json() if the server responds with JSON
+    // .then(html => {
+    //     document.open();
+    //     document.write(html); // Write the new HTML to the document
+    //     document.close();
+    // })
+    // .catch(error => console.error('Error:', error));
+});

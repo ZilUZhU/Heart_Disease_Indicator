@@ -37,6 +37,7 @@ Promise.all([
 ]).then(function([us, healthData]) {
     // Process heart attack data
     var heartAttackRates = {};
+
     healthData.forEach(function(d) {
         if (!heartAttackRates[d.State]) heartAttackRates[d.State] = { yes: 0, total: 0 };
         heartAttackRates[d.State].total += 1;
@@ -49,12 +50,31 @@ Promise.all([
         rate.percentage = (rate.yes / rate.total) * 100;
     });
 
+    function calculateRate(healthData, field, state, keyword = 'Y') {
+        var resultRate = {}
+
+        healthData.forEach(function(d) {
+          if (!resultRate[d['State']]) resultRate[d['State']] = { yes: 0, total: 0 };
+          resultRate[d['State']].total += 1;
+
+          if (d[field].startsWith(keyword)) resultRate[d['State']].yes += 1;
+        });
+        var rate = 1;
+        // console.log(resultRate[state])
+  
+        // Calculate percentages
+        Object.keys(resultRate).forEach(function(State) {
+            rate = resultRate[State];
+            rate.percentage = (rate.yes / rate.total) * 100;
+        });
+        // console.log(rate)
+        
+        return resultRate[state];
+    }
+
+
     const groupedData = d3.group(healthData, d => d.State);
 
-    const averageSleepByState = Array.from(groupedData, ([state, values]) => {
-      const average = d3.mean(values, d => d.SleepHours);
-      return { State: state, AverageSleepHours: average };
-    });
     const averageValueByState = Array.from(groupedData, ([state, values]) => {
       const avgSleepHours = d3.mean(values, d => d.SleepHours);
       return { State: state, 
@@ -84,16 +104,25 @@ Promise.all([
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
+            // variables for tootip
             var state = d.properties.name;
             var rate = heartAttackRates[state];
             var stateVal = averageValueByState.find(item => item.State === state)
             var sleepHour = stateVal.AverageSleepHours.toFixed(2)
             var avgBMI = stateVal.AverageBMI.toFixed(2)
-            var text = state + "<br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data")
-                        + (d3.select('#SleepHours').property('checked') ? "<br> Average Sleep Hours: " + sleepHour: "")  // add checkbox options
-                        + (d3.select('#BMI').property('checked') ? "<br> Average BMI: " + avgBMI: "") 
+            var strokeRate = calculateRate(healthData, "HadStroke", state)
+            var diabetesRate = calculateRate(healthData, "HadDiabetes", state)
+            var smokingRate = calculateRate(healthData, "SmokerStatus", state, 'C')
+            var asthmaRate = calculateRate(healthData, "HadAsthma", state)
+            // tooltip text
+            var text = "<b>" + state + "</b><br>" + (rate ? "Heart Attack Rate: " + rate.percentage.toFixed(2) + "%" : "No data")
+                        + (d3.select('#SleepHours').property('checked') ? "<br>Average Sleep Hours: " + sleepHour: "")  // add checkbox options
+                        + (d3.select('#BMI').property('checked') ? "<br>Average BMI: " + avgBMI: "") 
+                        + (d3.select('#HadStroke').property('checked') ? "<br> Stroke Rate: " + strokeRate.percentage.toFixed(2) + "%": "") 
+                        + (d3.select('#HadDiabetes').property('checked') ? "<br> Diabetes Rate: " + diabetesRate.percentage.toFixed(2) + "%": "")
+                        + (d3.select('#SmokerStatus').property('checked') ? "<br> Smoking Rate: " + smokingRate.percentage.toFixed(2) + "%": "")
+                        + (d3.select('#HadAsthma').property('checked') ? "<br> Asthma Rate: " + asthmaRate.percentage.toFixed(2) + "%": "")
                         ;
-
             
             
             tooltip.html(text)

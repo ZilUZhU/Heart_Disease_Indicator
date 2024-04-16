@@ -3,6 +3,7 @@ var formContainer = document.getElementById('formContainer');
 // Create the form element
 var form = document.createElement('form')
 // form.setAttribute('method', 'get')
+form.setAttribute('id', 'userInput')
 
 function addField (form, name, type = "text", placeholder = '') {
     var input = document.createElement('input')
@@ -146,7 +147,7 @@ form.appendChild(submitButton);
 // Finally, append the form to the container
 formContainer.appendChild(form);
 
-document.getElementById('myForm').addEventListener('submit', function(event) {
+document.getElementById('userInput').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the traditional form submission
 
     // Optionally validate the form data here
@@ -165,3 +166,21 @@ document.getElementById('myForm').addEventListener('submit', function(event) {
     // })
     // .catch(error => console.error('Error:', error));
 });
+
+
+
+async function test() {
+    const response = await fetch('http://localhost:8000/test');
+    const data = await response.json();
+    console.log('Multiplication Result:', data.result);
+}
+
+
+
+var testButton = document.getElementById('test');
+testButton.setAttribute('type', 'button');
+testButton.setAttribute('value', 'test');
+testButton.onclick = function() {
+    console.log('Test');
+    // test();
+};

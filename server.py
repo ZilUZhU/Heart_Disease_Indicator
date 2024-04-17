@@ -1,6 +1,7 @@
 import http.server
 import socketserver
 import json
+from model.export_model import run_model
 
 PORT = 8001
 
@@ -25,8 +26,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.do_GET()
     def do_POST(self):
-        print("post headers:")
-        print(self.headers)
+        # print("post headers:")
+        # print(self.headers)
         content_length = int(self.headers['Content-Length'])  # Get the size of data
         post_data = self.rfile.read(content_length)  # Gets the data itself
         self.handle_request(post_data.decode('utf-8'))  # Decode it to string
@@ -38,7 +39,10 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(400)
         else:
             self.send_response(200)
-            result = {'result': data}  # Process the data here
+            p = run_model(data)
+            # p = 0.01
+            result = {'result': data, 'prob': p[0]}  # Process the data here
+            
         
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')  # Handle CORS

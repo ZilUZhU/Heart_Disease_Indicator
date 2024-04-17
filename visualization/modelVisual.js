@@ -20,30 +20,8 @@ function addField (form, name, type = "text", placeholder = '') {
     form.appendChild(input);
 
 }
-// alcohol drinking
-addField(form, "Alcohol Drinking", type = "number")
-// smoking
-addField(form, "Smoking", type = "text")
-// stroke
 
-// physical health
-
-// mental health
-
-// diffwalking
-
-// sex
-addField(form, "Gender", type = "text")
-
-// age category
-
-// race
-
-// diabetic
-
-// physical activity
-
-// genhealth
+// function
 function createStyledRadioButton(name, id, value, labelText) {
     const wrapper = document.createElement('div');
     wrapper.style.marginBottom = '10px';
@@ -71,10 +49,55 @@ function createStyledLabel(forInput, textContent) {
     label.style.display = 'block';
     label.style.marginTop = '10px';
     label.style.marginBottom = '5px';
+    label.style.fontWeight = 'bold';
     return label;
 }
 
-// Add a section for single choice input
+
+// alcohol drinking
+addField(form, "Alcohol Drinking", type = "number")
+// smoking
+// addField(form, "Smoking", type = "text")
+const smoking_question = createStyledLabel('smoke', 'How often do you smoke?');
+form.appendChild(smoking_question);
+Smoking_options = [
+    { id: 'smoke0', value: 'Former smoker', labelText: 'Former smoker' },
+    { id: 'smoke1', value: 'Never smoked', labelText: 'Never smoked' },
+    { id: 'smoke2', value: 'Current smoker - now smokes every day', labelText: 'Current smoker - now smokes every day' },
+    { id: 'smoke3', value: 'Current smoker - now smokes some days', labelText: 'Current smoker - now smokes some days' },
+    ]
+Smoking_options.forEach(option => {
+    form.appendChild(createStyledRadioButton('smoke', option.id, option.value, option.labelText));
+});
+// stroke
+const stroke_question = createStyledLabel('stroke', 'Have you had stroke?');
+form.appendChild(stroke_question);
+Stroke_options = [
+    { id: 'stroke0', value: 'Yes', labelText: 'Yes' },
+    { id: 'stroke1', value: 'No', labelText: 'No' },
+    ]
+Stroke_options.forEach(option => {
+    form.appendChild(createStyledRadioButton('stroke', option.id, option.value, option.labelText));
+});
+
+// physical health
+
+// mental health
+
+// diffwalking
+
+// sex
+addField(form, "Gender", type = "text")
+
+// age category
+
+// race
+
+// diabetic
+
+// physical activity
+
+// genhealth
 const questionLabel = createStyledLabel('genhealth', 'What is your general health status?');
 questionLabel.style.fontWeight = 'bold';
 form.appendChild(questionLabel);
@@ -161,27 +184,23 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     // Log all form values
     console.log(values);
 
-    // TODO: send data to backend
-    // fetch('submitForm.php', {
-    //     method: 'POST',
-    //     body: formData
-    // })
-    // .then(response => response.text()) // Or response.json() if the server responds with JSON
-    // .then(html => {
-    //     document.open();
-    //     document.write(html); // Write the new HTML to the document
-    //     document.close();
-    // })
-    // .catch(error => console.error('Error:', error));
+    // TODO: convert values to data input for model
+
+    // user_input = [values['BMI'],  values['Smoking'], values['Stroke'], values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']]
+    user_input = [29.76, 1.0, 0.0, 1.0, 0.0, 1.0, 9.0, 0.0, 9.0, 2.0]
+    // user_input = [29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']
 
 
+
+    // call model function
     fetch('http://127.0.0.1:8001', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
         },
-        body: JSON.stringify(values)
+        // body: JSON.stringify(values)
+        body: JSON.stringify(user_input)
     })
     .then(response => response.json())
     .then(data => {

@@ -5,7 +5,7 @@ var form = document.createElement('form')
 form.setAttribute('method', 'get')
 form.setAttribute('id', 'userInput')
 
-function addField (form, name, type = "text", placeholder = '') {
+function addField (form, name, type = "text", placeholder = '', label_text = '') {
     var input = document.createElement('input')
     input.setAttribute('type', type)
     input.setAttribute('name', name)
@@ -14,7 +14,10 @@ function addField (form, name, type = "text", placeholder = '') {
 
     var label = document.createElement('label');
     label.setAttribute('for', name);
-    label.textContent = name+": ";
+    if (label_text === '') {
+        label_text = name+": ";
+    }
+    label.textContent = label_text;
 
     form.appendChild(label);
     form.appendChild(input);
@@ -58,7 +61,7 @@ function createStyledLabel(forInput, textContent) {
 addField(form, "Alcohol Drinking", type = "number")
 // smoking
 // addField(form, "Smoking", type = "text")
-const smoking_question = createStyledLabel('smoke', 'How often do you smoke?');
+const smoking_question = createStyledLabel('Smoking', 'How often do you smoke?');
 form.appendChild(smoking_question);
 Smoking_options = [
     { id: 'smoke0', value: 'Former smoker', labelText: 'Former smoker' },
@@ -67,20 +70,23 @@ Smoking_options = [
     { id: 'smoke3', value: 'Current smoker - now smokes some days', labelText: 'Current smoker - now smokes some days' },
     ]
 Smoking_options.forEach(option => {
-    form.appendChild(createStyledRadioButton('smoke', option.id, option.value, option.labelText));
+    form.appendChild(createStyledRadioButton('Smoking', option.id, option.value, option.labelText));
 });
 // stroke
-const stroke_question = createStyledLabel('stroke', 'Have you had stroke?');
+const stroke_question = createStyledLabel('Stroke', 'Have you had stroke?');
 form.appendChild(stroke_question);
 Stroke_options = [
     { id: 'stroke0', value: 'Yes', labelText: 'Yes' },
     { id: 'stroke1', value: 'No', labelText: 'No' },
     ]
 Stroke_options.forEach(option => {
-    form.appendChild(createStyledRadioButton('stroke', option.id, option.value, option.labelText));
+    form.appendChild(createStyledRadioButton('Stroke', option.id, option.value, option.labelText));
 });
 
 // physical health
+PhysicalHealth_question = createStyledLabel('PhysicalHealth', 'Now thinking about your physical health, which includes physical illness and injury, for how many days during the past 30 days was your physical health not good?');
+form.appendChild(PhysicalHealth_question)
+addField(form, "PhysicalHealth", type = "number", label_text = 'Days: ')
 
 // mental health
 
@@ -145,20 +151,6 @@ BMILabel.textContent = 'BMI: ';
 var submitButton = document.createElement('input');
 submitButton.setAttribute('type', 'submit');
 submitButton.setAttribute('value', 'Submit');
-// submitButton.addEventListener('click', function() {
-//     // TODO: send to backend
-//     console.log('submit');
-//     const formData = new FormData(form);
-//     const values = {};
-//     for (let [key, value] of formData.entries()) {
-//         values[key] = value;
-//     }
-
-//     // Log all form values
-//     console.log(values);
-// });
-
-
 
 // Append the input fields and the submit button to the form
 form.appendChild(BMILabel);
@@ -189,6 +181,7 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     // user_input = [values['BMI'],  values['Smoking'], values['Stroke'], values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']]
     user_input = [29.76, 1.0, 0.0, 1.0, 0.0, 1.0, 9.0, 0.0, 9.0, 2.0]
     // user_input = [29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']
+    console.log([values['BMI'],  values['Smoking'], values['Stroke'], values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']])
 
 
 

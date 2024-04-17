@@ -1,36 +1,161 @@
 <!DOCTYPE html>
-
 <head>
-    <title>Heart Disease Indicator</title>
+    <title>Heart Disease Indicators Map & Projection Model</title>
     <meta charset="utf-8">
     <style>
-    /* css rules */
+        /* CSS rules */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #mapContainer {
+            width: 960px;
+            height: 500px;
+            margin-top: 20px;
+        }
+
+        #formContainer {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        #modelContainer {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-container input[type="checkbox"],
+        .checkbox-container label {
+            margin-right: 5px;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .question-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .radio-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-wrapper input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .tooltip {
+            font-size: 12px;
+            max-width: 300px;
+        }
     </style>
 </head>
 
 <body>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
-    <script src="https://d3js.org/topojson.v3.min.js"></script>
-    <script src="https://d3js.org/d3-array.v2.min.js"></script>
-    <script type="text/javascript" src="mapView.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+<script src="https://d3js.org/topojson.v3.min.js"></script>
+<script src="https://d3js.org/d3-array.v2.min.js"></script>
 
-    <div>
-        <input type="checkbox" id="SleepHours" name="SleepHours" />
-        <label for="SleepHours">Sleep Hours</label>
-        <input type="checkbox" id="BMI" name="BMI" />
-        <label for="BMI">BMI</label>
-        <input type="checkbox" id="HadStroke" name="HadStroke" />
-        <label for="HadStroke">Had Stroke</label>
-        <input type="checkbox" id="HadDiabetes" name="HadDiabetes" />
-        <label for="HadDiabetes">Had Diabetes</label>
-        <input type="checkbox" id="SmokerStatus" name="SmokerStatus" />
-        <label for="SmokerStatus">Smoking</label>
-        <input type="checkbox" id="HadAsthma" name="HadAsthma" />
-        <label for="HadAsthma">Had Asthma</label>
-        <button type="button" id="test">test</button>
-
+<div class="flex-container">
+    <div class="title">Heart Disease Indicators Map & Projection Model</div>
+    <div id="mapContainer"></div>
+    <script src="mapView.js" type="text/javascript"></script>
+    <div id="formContainer">
+        <div class="form-title">Additional Indicators：</div>
+        <div class="checkbox-container">
+            <input id="SleepHours" name="SleepHours" type="checkbox"/>
+            <label for="SleepHours">Sleep Hours</label>
+            <input id="BMI" name="BMI" type="checkbox"/>
+            <label for="BMI">BMI</label>
+            <input id="HadStroke" name="HadStroke" type="checkbox"/>
+            <label for="HadStroke">Had Stroke</label>
+            <input id="HadDiabetes" name="HadDiabetes" type="checkbox"/>
+            <label for="HadDiabetes">Had Diabetes</label>
+            <input id="SmokerStatus" name="SmokerStatus" type="checkbox"/>
+            <label for="SmokerStatus">Smoking</label>
+            <input id="HadAsthma" name="HadAsthma" type="checkbox"/>
+            <label for="HadAsthma">Had Asthma</label>
+        </div>
     </div>
-    <div id="formContainer" class="flex-container"></div>
-    <script type="text/javascript" src="modelVisual.js"></script>
+    <div id="modelContainer">
+        <script src="modelVisual.js" type="text/javascript"></script>
+    </div>
+</div>
 </body>

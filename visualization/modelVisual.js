@@ -1,186 +1,111 @@
-var formContainer = document.getElementById('formContainer');
+var modelContainer = document.getElementById('modelContainer');
+
+// Create the form title element
+var formTitle = document.createElement('div');
+formTitle.className = 'form-title';
+formTitle.textContent = 'Project Model Questionnaire:';
+modelContainer.appendChild(formTitle);
 
 // Create the form element
-var form = document.createElement('form')
-// form.setAttribute('method', 'get')
-form.setAttribute('id', 'userInput')
+var form = document.createElement('form');
+form.setAttribute('id', 'userInput');
 
-function addField (form, name, type = "text", placeholder = '') {
-    var input = document.createElement('input')
-    input.setAttribute('type', type)
-    input.setAttribute('name', name)
-    input.setAttribute('id', name)
-    input.setAttribute('placeholder', placeholder)
-
+function addField(form, name, type = "text", placeholder = '') {
     var label = document.createElement('label');
     label.setAttribute('for', name);
-    label.textContent = name+": ";
+    label.textContent = name + ": ";
 
-    form.appendChild(label);
-    form.appendChild(input);
-
-}
-// alcohol drinking
-addField(form, "Alcohol Drinking", type = "number")
-// smoking
-addField(form, "Smoking", type = "text")
-// stroke
-
-// physical health
-
-// mental health
-
-// diffwalking
-
-// sex
-addField(form, "Gender", type = "text")
-
-// age category
-
-// race
-
-// diabetic
-
-// physical activity
-
-// genhealth
-function createStyledRadioButton(name, id, value, labelText) {
-    const wrapper = document.createElement('div');
-    wrapper.style.marginBottom = '10px';
-
-    const input = document.createElement('input');
-    input.setAttribute('type', 'radio');
+    var input = document.createElement('input');
+    input.setAttribute('type', type);
     input.setAttribute('name', name);
-    input.setAttribute('id', id);
-    input.setAttribute('value', value);
-    input.style.marginRight = '10px';
+    input.setAttribute('id', name);
+    input.setAttribute('placeholder', placeholder);
 
-    const label = document.createElement('label');
-    label.setAttribute('for', id);
-    label.textContent = labelText;
-
-    wrapper.appendChild(input);
+    var wrapper = document.createElement('div');
+    wrapper.className = 'form-field';
     wrapper.appendChild(label);
-    return wrapper;
+    wrapper.appendChild(input);
+
+    form.appendChild(wrapper);
 }
 
-function createStyledLabel(forInput, textContent) {
-    const label = document.createElement('label');
-    label.setAttribute('for', forInput);
-    label.textContent = textContent;
-    label.style.display = 'block';
-    label.style.marginTop = '10px';
-    label.style.marginBottom = '5px';
-    return label;
+function addDropdown(form, name, options) {
+    var label = document.createElement('label');
+    label.setAttribute('for', name);
+    label.textContent = name + ": ";
+
+    var select = document.createElement('select');
+    select.setAttribute('name', name);
+    select.setAttribute('id', name);
+
+    options.forEach(option => {
+        var optionElement = document.createElement('option');
+        optionElement.setAttribute('value', option);
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+    });
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'form-field';
+    wrapper.appendChild(label);
+    wrapper.appendChild(select);
+
+    form.appendChild(wrapper);
 }
-
-// Add a section for single choice input
-const questionLabel = createStyledLabel('genhealth', 'What is your general health status?');
-questionLabel.style.fontWeight = 'bold';
-form.appendChild(questionLabel);
-
-// Options for the single choice question
-// Very good', 'Fair', 'Good', 'Excellent', 'Poor'
-const options = [
-    { id: 'genhealth0', value: 'Excellent', labelText: 'Excellent' },
-    { id: 'genhealth1', value: 'Very good', labelText: 'Very good' },
-    { id: 'genhealth2', value: 'Good', labelText: 'Good' },
-    { id: 'genhealth3', value: 'Fair', labelText: 'Fair' },
-    { id: 'genhealth4', value: 'Poor', labelText: 'Poor' },
-];
-
-// Append radio buttons for each option
-options.forEach(option => {
-    form.appendChild(createStyledRadioButton('genhealth', option.id, option.value, option.labelText));
-});
-
-
-// sleep time
-
-// asthma
-const asthmaLabel = createStyledLabel('', 'Have you had asthma?');
-asthmaLabel.style.fontWeight = 'bold';
-
-// kidney disease
-
-// skin cancer
-
-// Create fields for required inputs
 
 // BMI
-var BMIinput = document.createElement('input')
-BMIinput.setAttribute('id', 'BMI')
-BMIinput.setAttribute('type', 'number')
-BMIinput.setAttribute('name', 'BMI')
-BMIinput.setAttribute('placeholder', '0')
+addField(form, "BMI", type = "number", placeholder = '0');
 
-var BMILabel = document.createElement('label');
-BMILabel.setAttribute('for', 'BMI');
-BMILabel.textContent = 'BMI: ';
+// Smoking
+addDropdown(form, "Smoking", ["Never Smoked","Current Smoker - every day", "Current Smoker - some days","Former smoker" ]);
+
+// Alcohol Drinking
+addDropdown(form, "Alcohol Drinking", ["Yes", "No"]);
+
+// Physical Healthy days for past 30 days
+addField(form, "Physical Healthy days for past 30 days", type = "number", placeholder = '0');
+
+// Mental Healthy days for past 30 days
+addField(form, "Mental Healthy days for past 30 days", type = "number", placeholder = '0');
+
+// Difficult in Walking
+addDropdown(form, "Difficult in Walking", ["Yes", "No"]);
+
+// Sex
+addDropdown(form, "Sex", ["Male", "Female"]);
+
+// Age Category
+addDropdown(form, "Age Category", ["18-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-Older"]);
+
+// Race
+addDropdown(form, "Race", ["White", "Black", "Other Race", "Multiracial", "Hispanic"]);
+
+// Diabetic
+addDropdown(form, "Diabetic", ["No", "Yes", "Yes but during pregnancy", "No but pre-diabetes or borderline diabetes"]);
+
+// Physical Active
+addDropdown(form, "Physical Active", ["Yes", "No"]);
+
+// General Health
+addDropdown(form, "General Health", ["Very Good", "Fair", "Good", "Excellent", "Poor"]);
+
+// Sleep Time
+addField(form, "Sleep Time Daily", type = "number", placeholder = '0');
+
+// Asthma
+addDropdown(form, "Had Asthma ?", ["Yes", "No"]);
+
+// Kidney Disease
+addDropdown(form, "Had Kidney Disease ?", ["Yes", "No"]);
+
+// Skin Cancer
+addDropdown(form, "Had Skin Cancer ?", ["Yes", "No"]);
 
 // Create the submit button
-var submitButton = document.createElement('input');
+var submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
-submitButton.setAttribute('value', 'Submit');
-// submitButton.addEventListener('click', function() {
-//     // TODO: send to backend
-//     console.log('submit');
-//     const formData = new FormData(form);
-//     const values = {};
-//     for (let [key, value] of formData.entries()) {
-//         values[key] = value;
-//     }
-
-//     // Log all form values
-//     console.log(values);
-// });
-
-
-
-// Append the input fields and the submit button to the form
-form.appendChild(BMILabel);
-form.appendChild(BMIinput);
-// form.appendChild();
-// form.appendChild();
+submitButton.textContent = 'Submit';
 form.appendChild(submitButton);
 
-// Finally, append the form to the container
-formContainer.appendChild(form);
-
-document.getElementById('userInput').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the traditional form submission
-
-    // Optionally validate the form data here
-    const formData = new FormData(this);
-
-    // TODO: send data to backend
-    // fetch('submitForm.php', {
-    //     method: 'POST',
-    //     body: formData
-    // })
-    // .then(response => response.text()) // Or response.json() if the server responds with JSON
-    // .then(html => {
-    //     document.open();
-    //     document.write(html); // Write the new HTML to the document
-    //     document.close();
-    // })
-    // .catch(error => console.error('Error:', error));
-});
-
-
-
-async function test() {
-    const response = await fetch('http://localhost:8000/test');
-    const data = await response.json();
-    console.log('Multiplication Result:', data.result);
-}
-
-
-
-var testButton = document.getElementById('test');
-testButton.setAttribute('type', 'button');
-testButton.setAttribute('value', 'test');
-testButton.onclick = function() {
-    console.log('Test');
-    // test();
-};
+// Append the form to the model container
+modelContainer.appendChild(form);

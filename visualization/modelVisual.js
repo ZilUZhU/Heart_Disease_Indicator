@@ -2,7 +2,7 @@ var formContainer = document.getElementById('formContainer');
 
 // Create the form element
 var form = document.createElement('form')
-// form.setAttribute('method', 'get')
+form.setAttribute('method', 'get')
 form.setAttribute('id', 'userInput')
 
 function addField (form, name, type = "text", placeholder = '') {
@@ -153,6 +153,14 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     // Optionally validate the form data here
     const formData = new FormData(this);
 
+    const values = {};
+    for (let [key, value] of formData.entries()) {
+        values[key] = value;
+    }
+
+    // Log all form values
+    console.log(values);
+
     // TODO: send data to backend
     // fetch('submitForm.php', {
     //     method: 'POST',
@@ -165,14 +173,47 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     //     document.close();
     // })
     // .catch(error => console.error('Error:', error));
+
+
+    fetch('http://127.0.0.1:8001', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify(values)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 });
 
 
 
 async function test() {
-    const response = await fetch('http://localhost:8000/test');
+    const response = await fetch('http://localhost:8001/test');
     const data = await response.json();
-    console.log('Multiplication Result:', data.result);
+    console.log('test result:', data.result);
+    const response2 = await fetch('http://127.0.0.1:8001/test', {
+        method: 'POST',
+        // mode: "no-cors",
+        // cache: "no-cache",
+        // credentials: "omit",
+        AccessControlAllowOrigin: '*',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'content': 'contents'
+        },
+        body: JSON.stringify("values")
+    });
+    const data2 = await response2.json();
+    console.log('post:', data2.result);
+
 }
 
 
@@ -182,5 +223,5 @@ testButton.setAttribute('type', 'button');
 testButton.setAttribute('value', 'test');
 testButton.onclick = function() {
     console.log('Test');
-    // test();
+    test();
 };

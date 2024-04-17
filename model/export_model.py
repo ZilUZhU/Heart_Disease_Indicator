@@ -92,10 +92,22 @@ def preprocess_input(user_input):
     mapping = {
         'Yes': 1.0,
         'No': 0.0,
-        'Uncomfortable': 0.0,
-        'Comfortable': 1.0,
-        'Bad': 0.0,
-        'Good': 1.0
+        'Male': 0.0,
+        'Female': 1.0,
+        'No, borderline diabetes': 2.0,
+        '18-24': 1.0,
+        '24-29': 2.0,
+        '30-34': 3.0,
+        '35-39': 4.0,
+        '40-44': 5.0,
+        '45-49': 6.0,
+        '50-54': 7.0,
+        '55-59': 8.0,
+        '60-64': 9.0,
+        '65-69': 10.0,
+        '70-74': 11.0,
+        '75-79': 12.0,
+        '80 or older': 13.0
     }
 
     converted_input = []

@@ -72,6 +72,9 @@ def main():
     X_train, X_test, y_train, y_test = split_data(X,Y, df1)
     X_train_oversampled, Y_train_oversampled = over_sample_date(X_train, y_train, data_rate = 0.4)
     # Get user input and fit scaler
+    #user_input = [29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']
+    
+    # Transfer user input to number
     user_input = [29.76, 0.0, 0.0, 0.0, 0.0, 1.0, 7.0, 0.0, 0.0, 0.0]
     scaler = StandardScaler().fit(X_train_oversampled.values)
     # compute the output

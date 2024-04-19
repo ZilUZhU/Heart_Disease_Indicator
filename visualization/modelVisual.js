@@ -6,6 +6,11 @@ formTitle.className = 'form-title';
 formTitle.textContent = 'Project Model Questionnaire:';
 modelContainer.appendChild(formTitle);
 
+var riskQuestion = document.createElement('div');
+riskQuestion.className = 'risk-question';
+riskQuestion.textContent = 'What will be your heart attack risk?';
+modelContainer.appendChild(riskQuestion);
+
 // Create the form element
 var form = document.createElement('form');
 form.setAttribute('id', 'userInput');

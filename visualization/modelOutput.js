@@ -25,6 +25,27 @@ const svg2 = d3.select("#weightsvg")
     .attr("transform", `translate(${margin2.left},${margin2.top})`)
     .attr("class", "modelline");
 
+    // Add title for the weight plot
+    svg2.append("text")
+        .attr("x", width2 / 2)
+        .attr("y", -20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text("Probability of Heart Disease Based on Weight");
+
+    // Add title for the age plot
+    svg2.append("text")
+        .attr("x", width2 / 2)
+        .attr("y", height2 + 75)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text("Probability of Heart Disease Based on Age");
+
+
+
+
     fetchDataAndUpdateChart()
 
 async function fetchDataAndUpdateChart() {

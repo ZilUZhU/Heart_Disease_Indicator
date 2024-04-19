@@ -102,7 +102,7 @@ def compute_P(input, scaler, path):
 
 def run_model(user_input=[0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]):
     # user_input = preprocess_input((user_input))
-    user_input=[0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]
+    # user_input=[0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]
     with open('model/saved_files/scaler.pkl', 'rb') as f:
         scaler = pickle.load(f)
     
@@ -120,7 +120,7 @@ def preprocess_input(user_input):
         'No': 0.0,
         'Male': 0.0,
         'Female': 1.0,
-        'No, borderline diabetes': 2.0,
+
         '18-24': 1.0,
         '24-29': 2.0,
         '30-34': 3.0,
@@ -135,13 +135,21 @@ def preprocess_input(user_input):
         '75-79': 12.0,
         '80 or older': 13.0,
 
-        # 2022 inputs
         "Yes but during pregnancy": 1.0, 
         "No but pre-diabetes or borderline diabetes": 0.0,
-        "Never Smoked": 0.0,
-        "Current Smoker - every day": 1.0, 
-        "Current Smoker - some days": 1.0,
-        "Former smoker": 0.0 
+        
+        "Current smoker - now smokes every day": 0.0, 
+        "Current smoker - now smokes some days": 1.0,
+        "Former smoker": 2.0,
+        "Never Smoked": 3.0,
+
+        'Excellent': 0.0, 
+        'Fair': 1.0,
+        'Good': 2.0,
+        'Poor': 3.0,
+        'Very good': 4.0,
+
+
     }
 
     converted_input = []

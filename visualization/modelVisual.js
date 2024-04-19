@@ -46,8 +46,8 @@ function addDropdown(form, name, options, label_text = '') {
 
     options.forEach(option => {
         var optionElement = document.createElement('option');
-        optionElement.setAttribute('value', option);
-        optionElement.textContent = option;
+        optionElement.setAttribute('value', option[1]);
+        optionElement.textContent = option[0];
         select.appendChild(optionElement);
     });
 
@@ -60,10 +60,10 @@ function addDropdown(form, name, options, label_text = '') {
 }
 
 // Sex
-addDropdown(form, "Sex", ["Male", "Female"], label_text = "Sex at born: ");
+// addDropdown(form, "Sex", [["Male", 1], ["Female", 0]], label_text = "Sex at born: ");
 
 // Age Category
-addDropdown(form, "AgeCategory", ["18-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-Older"], "What is your age: ");
+addDropdown(form, "AgeCategory", [["18-24",0], ["25-29",1], ["30-34",2], ["35-39",3], ["40-44",4], ["45-49",5], ["50-54",6], ["55-59",7], ["60-64",8], ["65-69",9], ["70-74",10], ["75-79",11], ["80-Older",12]], "What is your age: ");
 
 // Height in meters
 addField(form, "HeightCM", type = "number", placeholder = '0', label_text = "What is your height in centimeters (cm)?");
@@ -72,37 +72,37 @@ addField(form, "HeightCM", type = "number", placeholder = '0', label_text = "Wha
 addField(form, "WeightKg", type = "number", placeholder = '0', label_text = "What is your weight in kilograms (kg)?");
 
 // Smoking
-addDropdown(form, "Smoking", ["Never Smoked","Current Smoker - every day", "Current Smoker - some days","Former smoker" ]);
+addDropdown(form, "Smoking", [["Never Smoked",3],["Current smoker - now smokes every day",0], ["Current Smoker - now smokes some days", 1],["Former smoker",2]]);
 
 // Diabetic
-addDropdown(form, "Diabetic", ["No", "Yes", "Yes but during pregnancy", "No but pre-diabetes or borderline diabetes"], "Have you ever had diabetes?");
+addDropdown(form, "Diabetic", [["No",0], ["Yes",2], ["Yes but only during pregnancy",3], ["No but pre-diabetes or borderline diabetes",1]], "Have you ever had diabetes?");
 
 // Alcohol Drinking
-addDropdown(form, "AlcoholDrinking", ["Yes", "No"], "Do you drink alcohol?");
+addDropdown(form, "AlcoholDrinking", [["Yes",1], ["No",0]], "Do you drink alcohol?");
 
 // General Health
-addDropdown(form, "GenHealth", ["Excellent", "Very Good", "Good", "Fair", "Poor"], "How would you rate your general health?");
+addDropdown(form, "GenHealth", [["Excellent",0], ["Very Good",4], ["Good",2], ["Fair",1], ["Poor",3]], "How would you rate your general health?");
 
 // Physical Healthy days for past 30 days
-addField(form, "PhysicalHealth", type = "number", placeholder = '0', label_text = "Now thinking about your physical health, which includes physical illness and injury, for how many days during the past 30 days was your physical health not good?");
+// addField(form, "PhysicalHealth", type = "number", placeholder = '0', label_text = "Now thinking about your physical health, which includes physical illness and injury, for how many days during the past 30 days was your physical health not good?");
 
 // Difficult in Walking
-addDropdown(form, "DiffWalking", ["Yes", "No"], label_text = "Do you have serious difficulty walking or climbing stairs?");
+// addDropdown(form, "DiffWalking", [["Yes",1], ["No",0]], label_text = "Do you have serious difficulty walking or climbing stairs?");
 
 // Stroke
-addDropdown(form, "Stroke", ["Yes", "No"], label_text = "Have you had a stroke?");
+addDropdown(form, "Stroke", [["Yes",1], ["No",0]], label_text = "Have you had a stroke?");
 
 // Asthma
-addDropdown(form, "Asthma", ["Yes", "No"], "Have you had Asthma:");
+// addDropdown(form, "Asthma", [["Yes",1], ["No",0]], "Have you had Asthma:");
 
 // Kidney Disease
-addDropdown(form, "KidneyDisease", ["Yes", "No"], "Not including kidney stones, bladder infection or incontinence, were you ever told you had kidney disease?");
+// addDropdown(form, "KidneyDisease", [["Yes",1], ["No",0]], "Not including kidney stones, bladder infection or incontinence, were you ever told you had kidney disease?");
 
 // Angina
-addDropdown(form, "Angina", ["Yes", "No"], "Have you ever had angina or coronary heart disease?");
+addDropdown(form, "Angina", [["Yes",1], ["No",0]], "Have you ever had angina or coronary heart disease?");
 
 // Chest Scan
-addDropdown(form, "ChestScan", ["Yes", "No"], "Have you ever had a CT scan or ECG of your chest?");
+addDropdown(form, "ChestScan", [["Yes",1], ["No",0]], "Have you ever had a CT scan or ECG of your chest?");
 
 // Create the submit button
 var submitButton = document.createElement('button');
@@ -128,8 +128,9 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     // Log all form values
     console.log(values);
 
-    // TODO: convert values to data input for model
-    user_input = [values['Sex'], values['AgeCategory'], +values['HeightCM'], +values['WeightKg'], values['Smoking'], values['Diabetic'], values['AlcoholDrinking'], values['GenHealth'], +values['PhysicalHealth'], values['DiffWalking'], values['Stroke'], values['Asthma'], values['KidneyDisease'], values['Angina'], values['ChestScan']];
+    //convert values to data input for model
+    user_input = [+values['Angina'], +values['AgeCategory'], +values['GenHealth'], +values['ChestScan'], +values['Stroke'], 
+            +values['Smoking'], +values['Diabetic'], +values['WeightKg'], +values['HeightCM']/100, +values['AlcoholDrinking']]
     console.log(user_input);
 
     // call model function

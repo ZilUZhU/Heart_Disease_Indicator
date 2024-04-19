@@ -137,8 +137,8 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
 
     // TODO: convert values to data input for model
 
-    // user_input = [values['BMI'],  values['Smoking'], values['Stroke'], values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']]
-    user_input = [29.76, 1.0, 0.0, 1.0, 0.0, 1.0, 9.0, 0.0, 9.0, 2.0]
+    user_input = [+values['BMI'],  values['Smoking'], values['Stroke'], +values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']]
+    // user_input = [29.76, 1.0, 0.0, 1.0, 0.0, 1.0, 9.0, 0.0, 9.0, 2.0]
     // user_input = [29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']
     console.log([values['BMI'],  values['Smoking'], values['Stroke'], values['PhysicalHealth'], values['DiffWalking'], values['Sex'], values['AgeCategory'], values['Diabetic'], values['Asthma'], values['KidneyDisease']])
 

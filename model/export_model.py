@@ -71,7 +71,7 @@ def compute_P(input, scaler):
 
 def run_model(user_input=[29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']):
     user_input = preprocess_input((user_input))
-    file_path = '../data/data2020.csv'
+    file_path = 'data/data2020.csv'
     df1 = read_data(file_path)
     # Get training data
     X = df1.drop('HeartDisease', axis=1)
@@ -107,7 +107,15 @@ def preprocess_input(user_input):
         '65-69': 10.0,
         '70-74': 11.0,
         '75-79': 12.0,
-        '80 or older': 13.0
+        '80 or older': 13.0,
+
+        # 2022 inputs
+        "Yes but during pregnancy": 1.0, 
+        "No but pre-diabetes or borderline diabetes": 0.0,
+        "Never Smoked": 0.0,
+        "Current Smoker - every day": 1.0, 
+        "Current Smoker - some days": 1.0,
+        "Former smoker": 0.0 
     }
 
     converted_input = []

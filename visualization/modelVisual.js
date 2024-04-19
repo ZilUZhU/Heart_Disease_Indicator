@@ -117,6 +117,9 @@ modelContainer.appendChild(form);
 document.getElementById('userInput').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the traditional form submission
 
+    d3.select("#weightsvg g").remove();
+    d3.select("#agesvg g").remove();
+
     // Optionally validate the form data here
     const formData = new FormData(this);
 
@@ -145,7 +148,7 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        displayoutput();
+        displayoutput(data.prob, user_input);
     })
     .catch((error) => {
         console.error('Error:', error);

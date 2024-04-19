@@ -1,35 +1,31 @@
 import numpy as np 
 import pickle
 import pandas as pd 
+from joblib import load
 
-# Normalize the row to the training pattern
 def normalize_row(row, scaler):
     row_reshaped = row.values.reshape(1, -1)
     normalized_row = scaler.transform(row_reshaped)
     return normalized_row  
 
-# Normalize the input and compute the Probability 
-def compute_P(input, scaler):
+def compute_P(input, scaler, path):
+    loaded_model = load(path)
     user_input_T = normalize_row(pd.DataFrame([input]),scaler)
-    coef = np.array([0.09889642, 0.22637016, 0.30912101, 0.2488255 , 0.18334112,
-         0.37937364, 1.03940385, 0.25440507, 0.13933909, 0.17579232]).flatten()
-    intercept = -1.29850855
-    # Compute the linear combination
-    z = np.dot(user_input_T, coef) + intercept
-    # Apply the logistic regression
-    p = 1 / (1 + np.exp(-z))
-    return p
+    predictions = loaded_model.predict_proba(user_input_T)
+    return predictions[0][1]
     
 def main():
     # Get user input and fit scaler
     #user_input = [29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']
-    with open('scaler.pkl', 'rb') as f:
-        scaler = pickle.load(f)
-    # Transfer user input to number
-    user_input = [29.76, 0.0, 0.0, 0.0, 0.0, 1.0, 7.0, 0.0, 0.0, 0.0]
+    
+    user_input = [0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]
 
+    with open('./saved_files/scaler.pkl', 'rb') as f:
+        scaler = pickle.load(f)
+    
+    model_path = './saved_files/logistic_model.joblib'
     # compute the output
-    P = compute_P(user_input, scaler)
+    P = compute_P(user_input, scaler,model_path)
     print(P)
 
 if __name__ == "__main__":

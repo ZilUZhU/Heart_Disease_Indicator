@@ -8,33 +8,30 @@ from torch.utils.data import DataLoader, TensorDataset
 from torch.optim import Adam
 
 
-def preprocess_data(data):
+def preprocess_data(data, scaler=None, fit_scaler=True):
     binary_columns = ['Smoking', 'AlcoholDrinking', 'Stroke', 'DiffWalking', 'Sex', 'Diabetic', 'PhysicalActivity',
                       'Asthma', 'KidneyDisease', 'SkinCancer']
     for col in binary_columns:
         data[col] = LabelEncoder().fit_transform(data[col])
-
     multiclass_columns = ['AgeCategory', 'Race', 'GenHealth']
     for col in multiclass_columns:
         data[col] = LabelEncoder().fit_transform(data[col])
-
     data['HeartDisease'] = data['HeartDisease'].apply(lambda x: 1 if x == 'Yes' else 0)
-
     X = data.drop('HeartDisease', axis=1)
     y = data['HeartDisease'].values
-
-    scaler = StandardScaler()
-    numeric_columns = ['BMI', 'PhysicalHealth', 'MentalHealth', 'SleepTime']
-    X[numeric_columns] = scaler.fit_transform(X[numeric_columns])
-
-    return X, y
+    if fit_scaler:
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+    else:
+        X = scaler.transform(X)
+    return X, y, scaler
 
 
 def create_datasets(X, y, batch_size=32):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    X_train = torch.tensor(X_train.values, dtype=torch.float32)
+    X_train = torch.tensor(X_train, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.long)
-    X_test = torch.tensor(X_test.values, dtype=torch.float32)
+    X_test = torch.tensor(X_test, dtype=torch.float32)
     y_test = torch.tensor(y_test, dtype=torch.long)
     train_dataset = TensorDataset(X_train, y_train)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -84,15 +81,31 @@ def evaluate_model(model, test_loader):
     print(f'Accuracy: {accuracy:.2f}%')
 
 
+def predict_single(model, input_data, scaler):
+    model.eval()
+    input_data = scaler.transform([input_data]) 
+    input_tensor = torch.tensor(input_data, dtype=torch.float32)
+    with torch.no_grad():
+        output = model(input_tensor)
+        probability = torch.softmax(output, dim=1)[:, 1].item()
+    return probability
+
+
 def main():
     data = pd.read_csv('../data/data2020.csv')
-    X, y = preprocess_data(data)
+    X, y, scaler = preprocess_data(data)
     train_loader, test_loader = create_datasets(X, y)
     model = HeartDiseaseModel(X.shape[1])
     optimizer = Adam(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
     train_model(model, train_loader, criterion, optimizer)
     evaluate_model(model, test_loader)
+    torch.save(model.state_dict(), 'model_checkpoint/heart_disease_model.pth')
+    torch.save(scaler, 'model_checkpoint/scaler.pth')
+
+    new_input = [0.5, 0.5, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0]
+    probability = predict_single(model, new_input, scaler)
+    print(f'Predicted Probability of Heart Disease: {probability:.4f}')
 
 
 if __name__ == "__main__":

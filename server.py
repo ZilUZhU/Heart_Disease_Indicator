@@ -44,7 +44,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             p = run_model(data)
             # p = 0.01
-            result = {'result': data, 'prob': p[0]}  # Process the data here
+            result = {'result': data, 'prob': p}  # Process the data here
 
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')  # Handle CORS

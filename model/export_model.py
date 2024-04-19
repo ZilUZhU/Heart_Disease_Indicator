@@ -8,6 +8,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.preprocessing import LabelEncoder
+from joblib import load
+import pickle
 
 
 # Read data from CSV
@@ -49,40 +51,64 @@ def over_sample_date(X_train, y_train, data_rate=1):
     return X_train_oversampled, y_train_oversampled
 
 
-# Normalize the row to the training pattern
+# # Normalize the row to the training pattern
+# def normalize_row(row, scaler):
+#     row_reshaped = row.values.reshape(1, -1)
+#     normalized_row = scaler.transform(row_reshaped)
+#     return normalized_row
+
+
+# # Normalize the input and compute the Probability 
+# def compute_P(input, scaler):
+#     user_input_T = normalize_row(pd.DataFrame([input]), scaler)
+#     coef = np.array([0.09250334, 0.23067485, 0.30712092, 0.24308795, 0.19264143,
+#                      0.35994048, 1.03353847, 0.2447468, 0.13934069, 0.17743164]).flatten()
+#     intercept = -1.29850855
+#     # Compute the linear combination
+#     z = np.dot(user_input_T, coef) + intercept
+#     # Apply the logistic regression
+#     p = 1 / (1 + np.exp(-z))
+#     return p
+
 def normalize_row(row, scaler):
     row_reshaped = row.values.reshape(1, -1)
     normalized_row = scaler.transform(row_reshaped)
-    return normalized_row
+    return normalized_row  
+
+def compute_P(input, scaler, path):
+    loaded_model = load(path)
+    user_input_T = normalize_row(pd.DataFrame([input]),scaler)
+    predictions = loaded_model.predict_proba(user_input_T)
+    return predictions[0][1]
 
 
-# Normalize the input and compute the Probability 
-def compute_P(input, scaler):
-    user_input_T = normalize_row(pd.DataFrame([input]), scaler)
-    coef = np.array([0.09250334, 0.23067485, 0.30712092, 0.24308795, 0.19264143,
-                     0.35994048, 1.03353847, 0.2447468, 0.13934069, 0.17743164]).flatten()
-    intercept = -1.29850855
-    # Compute the linear combination
-    z = np.dot(user_input_T, coef) + intercept
-    # Apply the logistic regression
-    p = 1 / (1 + np.exp(-z))
-    return p
+# def run_model(user_input=[29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']):
+#     user_input = preprocess_input((user_input))
+#     file_path = 'data/data2020.csv'
+#     df1 = read_data(file_path)
+#     # Get training data
+#     X = df1.drop('HeartDisease', axis=1)
+#     Y = df1['HeartDisease']
+#     X_train, X_test, y_train, y_test = split_data(X, Y, df1)
+#     X_train_oversampled, Y_train_oversampled = over_sample_date(X_train, y_train, data_rate=0.4)
+#     # Get user input and fit scaler
+#     # user_input = [29.76, 0.0, 0.0, 0.0, 0.0, 1.0, 7.0, 0.0, 0.0, 0.0]
+#     scaler = StandardScaler().fit(X_train_oversampled.values)
+#     # compute the output
+#     P = compute_P(user_input, scaler)
+#     print(P)
+#     print('ok')
+#     return P
 
-
-def run_model(user_input=[29.76, 'No', 'No', 'Uncomfortable', 'No', 'No', 7.0, 'No', 'Bad', 'No']):
-    user_input = preprocess_input((user_input))
-    file_path = 'data/data2020.csv'
-    df1 = read_data(file_path)
-    # Get training data
-    X = df1.drop('HeartDisease', axis=1)
-    Y = df1['HeartDisease']
-    X_train, X_test, y_train, y_test = split_data(X, Y, df1)
-    X_train_oversampled, Y_train_oversampled = over_sample_date(X_train, y_train, data_rate=0.4)
-    # Get user input and fit scaler
-    # user_input = [29.76, 0.0, 0.0, 0.0, 0.0, 1.0, 7.0, 0.0, 0.0, 0.0]
-    scaler = StandardScaler().fit(X_train_oversampled.values)
+def run_model(user_input=[0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]):
+    # user_input = preprocess_input((user_input))
+    user_input=[0.0, 9.0, 4.0, 1.0, 0.0, 3.0, 0.0, 111.13, 1.63, 0.0]
+    with open('model/saved_files/scaler.pkl', 'rb') as f:
+        scaler = pickle.load(f)
+    
+    model_path = 'model/saved_files/logistic_model.joblib'
     # compute the output
-    P = compute_P(user_input, scaler)
+    P = compute_P(user_input, scaler,model_path)
     print(P)
     print('ok')
     return P

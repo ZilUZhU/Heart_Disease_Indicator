@@ -145,6 +145,7 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
+        displayoutput();
     })
     .catch((error) => {
         console.error('Error:', error);

@@ -1,4 +1,5 @@
-const data = [
+function displayoutput() {
+    const data = [
     { bmi: 18.5, probability: 0.05 },
     { bmi: 20, probability: 0.1 },
     { bmi: 22.5, probability: 0.15 },
@@ -144,3 +145,4 @@ svg3.append("text")
 .attr("y", -margin2.left/1.5)
 .attr("x", -height2+margin2.top/2)
 .text("Probability of Getting Hear Disease");
+}

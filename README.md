@@ -2,6 +2,8 @@
 
 ## Introduction
 
+Our study proposes to revolutionize heart disease prediction and intervention accuracy by leveraging extensive datasets and advanced data analysis tools. We plan to utilize machine learning algorithms and visualizations to develop a prediction model that helps the audiences to see whether they are in high risks of getting heart disease. We implemented interactive visualizations to help people understand our model outputs with various factors.
+
 ## Visualization
 
 Our interactive visualization contains two parts.

@@ -221,7 +221,7 @@ function displayoutput(original_prob = 0.5, original_input = [0,0,0,0,0,0,0,0,0,
     .attr("transform", "rotate(-90)")
     .attr("y", -margin2.left/1.5)
     .attr("x", -height2+margin2.top/2)
-    .text("Probability of Getting Hear Disease");
+    .text("Probability of Getting Heart Disease");
     }
 
     // Add title for the age plot

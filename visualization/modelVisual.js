@@ -134,12 +134,12 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     }
 
     // Log all form values
-    console.log(values);
+    // console.log(values);
 
     //convert values to data input for model
     user_input = [+values['Angina'], +values['AgeCategory'], +values['GenHealth'], +values['ChestScan'], +values['Stroke'], 
             +values['Smoking'], +values['Diabetic'], +values['WeightKg'], +values['HeightCM']/100, +values['AlcoholDrinking']]
-    console.log(user_input);
+    // console.log(user_input);
 
     // call model function
     fetch('http://127.0.0.1:8001', {
@@ -152,7 +152,7 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
         displayoutput(data.prob, user_input);
     })
     .catch((error) => {

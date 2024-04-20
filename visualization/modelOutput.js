@@ -72,10 +72,8 @@ async function fetchDataAndUpdateChart() {
     }
 }
 
-  console.log(wdata)
-
 async function updateChart(data) {
-    console.log("data in chart generation", data)
+    // console.log("data in chart generation", data)
     const response = await data;
 // Add X axis
 const x = d3.scaleLinear()

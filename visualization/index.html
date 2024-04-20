@@ -130,6 +130,9 @@
             font-size: 12px;
             max-width: 300px;
         }
+        #explain {
+            width: 50%;
+        }
     </style>
 </head>
 
@@ -138,6 +141,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 <script src="https://d3js.org/topojson.v3.min.js"></script>
 <script src="https://d3js.org/d3-array.v2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
 <div class="flex-container">
     <div class="title">Heart Disease Indicators Map & Projection Model</div>
@@ -163,6 +167,7 @@
     <div id="modelContainer">
         <script src="modelVisual.js" type="text/javascript"></script>
     </div>
+    <div id = "explain"></div>
     <svg id="weightsvg"> </svg>
     <svg id="agesvg"> </svg>
     <script src="modelOutput.js"></script>

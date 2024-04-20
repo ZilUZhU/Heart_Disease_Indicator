@@ -84,6 +84,13 @@ Promise.all([
     var colorScale = d3.scaleSequential(d3.interpolateReds)
         .domain([0, d3.max(Object.values(heartAttackRates), d => d.percentage)]);
 
+    var legend = d3.legendColor().labelFormat(d3.format(".2f")).scale(colorScale);
+        svg.append("g")
+        .attr("id", "legend")
+            .attr("transform", `translate(${(width - 50)}, 60)`)
+            .attr('class','legend')
+            .call(legend)
+
     // Display the map
     svg.selectAll("path")
         .data(us.features)

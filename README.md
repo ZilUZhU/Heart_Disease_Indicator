@@ -10,9 +10,19 @@ First visualization is a map view, allow the audience to see the percentage of p
 
 Mouse hovering to each state, the audience can see the other detail information regarding health related conditions that might serve as heart disease indicators.
 
+![Map with tool tip](assets/map.png)
+
 <!-- include screenshot here -->
 
-Second visualization
+Second visualization consists of two line charts. First, you fill out the questionnaire:
+
+![question survey](assets/questions.png)
+
+Then, two line charts will be generated.
+
+![probability with respect to weight](assets/weight.png)
+
+![probability with respect to age](assets/age.png)
 
 
 ## Setting up the dataset
@@ -26,6 +36,8 @@ Run regression_oversample.ipynb to load the data and train the model
 ## Run the page
 
 In the main directory, run `python http.server`.
+
+In another terminal, run `python server.py`
 
 Server will be hosted at `port 8000` by default. In any browser, open localhost [http://localhost:8000](http://localhost:8000).
 

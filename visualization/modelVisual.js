@@ -3,7 +3,7 @@ var modelContainer = document.getElementById('modelContainer');
 // Create the form title element
 var formTitle = document.createElement('div');
 formTitle.className = 'form-title';
-formTitle.textContent = 'Project Model Questionnaire:';
+formTitle.textContent = 'Model Questionnaire, fill out to see prediction:';
 modelContainer.appendChild(formTitle);
 
 var riskQuestion = document.createElement('div');
@@ -124,6 +124,7 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
 
     d3.select("#weightsvg g").remove();
     d3.select("#agesvg g").remove();
+    d3.selectAll("#explain p").remove();
 
     // Optionally validate the form data here
     const formData = new FormData(this);
@@ -153,6 +154,14 @@ document.getElementById('userInput').addEventListener('submit', function(event) 
     .then(response => response.json())
     .then(data => {
         // console.log('Success:', data);
+        var explanation = d3.select("#explain").append("p")
+            .attr("y", 90)
+            .style("margin-top", "20px")
+            .text("Based on our calculation, your probability of getting a heart disease is "+ data.prob.toFixed(2)+"%.\n ");
+                d3.select("#explain").append("p")
+            .attr("y", 90)
+            .style("margin-top", "20px")
+            .text("Below you can see how this probability will change with respect to weight or age based on your other conditions. Red dot indicates your current probability.");
         displayoutput(data.prob, user_input);
     })
     .catch((error) => {

@@ -33,23 +33,29 @@ Then, two line charts will be generated.
 
 
 
-## Setting up the dataset
+## Setting up the dataset (Optional)
 
-Use `https://github.com/ZilUZhU/Heart_Disease_Indicator.git` to download the code.
+Note: The environment already included a pre-trained model from 2020
 
-Unzip the data2020.csv.zip to get data2020.csv. 
+Unzip the data2020.csv.zip or heart_2022_with_nans to csv data. 
 
-Run regression_oversample.ipynb to load the data and train the model
+Run regression_oversample.ipynb to load the data and train the model (You might need to check the correct data path)
+
+
 
 ## Run the page
 
 In the main directory, run `python http.server`.
 
+Front-end website will be hosted at `port 8000` by default. In any browser, open localhost [http://localhost:8000](http://localhost:8000).
+
 In another terminal, run `python server.py`
 
-Server will be hosted at `port 8000` by default. In any browser, open localhost [http://localhost:8000](http://localhost:8000).
+Back-end server will be hosted at `port 8001` by default.
 
 Click open [/visualization](http://localhost:8000/visualization/) to see interactive visualization.
+
+And submit questionnaire after the server.py is hosted.
 
 ## About Model
 

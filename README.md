@@ -37,7 +37,7 @@ Then, two line charts will be generated.
 
 Use `https://github.com/ZilUZhU/Heart_Disease_Indicator.git` to download the code.
 
-Unzip the data2020.csv.zip to get data2020.csv. 
+Unzip the data2020.csv.zip to get data2020.csv. (Or heart_2022_with_nans.csv)
 
 Run regression_oversample.ipynb to load the data and train the model
 

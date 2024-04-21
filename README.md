@@ -12,19 +12,23 @@ First visualization is a map view, allow the audience to see the percentage of p
 
 Mouse hovering to each state, the audience can see the other detail information regarding health related conditions that might serve as heart disease indicators.
 
-![Map with tool tip](assets/map.png)
+<img src="assets/map.png" alt="Map with tool tip" style="width: 700px; height: auto;">
+
+
 
 <!-- include screenshot here -->
 
 Second visualization consists of two line charts. First, you fill out the questionnaire:
 
-![question survey](assets/questions.png)
+<img src="assets/questions.png" alt="Map with tool tip" style="width: 400px; height: auto;">
+
 
 Then, two line charts will be generated.
 
-![probability with respect to weight](assets/weight.png)
-
-![probability with respect to age](assets/age.png)
+<div style="display: grid; grid-template-columns: 1fr 1fr;">
+    <img src="assets/weight.png" alt="Probability with respect to weight" style="width: 45%; height: auto;">
+    <img src="assets/age.png" alt="Probability with respect to age" style="width: 45%; height: auto;">
+</div>
 
 
 ## Setting up the dataset

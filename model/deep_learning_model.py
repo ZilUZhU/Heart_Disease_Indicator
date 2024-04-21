@@ -1,11 +1,10 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-import torch
-from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 from torch.optim import Adam
+import torch
+import torch.nn as nn
 
 
 def preprocess_data(data, scaler=None, fit_scaler=True):
@@ -40,23 +39,37 @@ def create_datasets(X, y, batch_size=32):
     return train_loader, test_loader
 
 
+class SimpleAttention(nn.Module):
+    def __init__(self, feature_dim):
+        super(SimpleAttention, self).__init__()
+        self.feature_dim = feature_dim
+        self.attention_weights = nn.Parameter(torch.randn(feature_dim, 1))
+
+    def forward(self, x):
+        weights = torch.softmax(self.attention_weights, dim=0)
+        attended_features = x * weights.T
+        return attended_features.sum(dim=1, keepdim=True)
+
+
 class HeartDiseaseModel(nn.Module):
     def __init__(self, input_dim):
         super(HeartDiseaseModel, self).__init__()
         self.layer1 = nn.Linear(input_dim, 128)
         self.layer2 = nn.Linear(128, 64)
         self.layer3 = nn.Linear(64, 32)
-        self.output = nn.Linear(32, 2)
+        self.attention = SimpleAttention(32)
+        self.output = nn.Linear(1, 2)
 
     def forward(self, x):
         x = torch.relu(self.layer1(x))
         x = torch.relu(self.layer2(x))
         x = torch.relu(self.layer3(x))
+        x = self.attention(x)
         x = self.output(x)
         return x
 
 
-def train_model(model, train_loader, criterion, optimizer, num_epochs=50):
+def train_model(model, train_loader, criterion, optimizer, num_epochs=300):
     for epoch in range(num_epochs):
         for X_batch, y_batch in train_loader:
             optimizer.zero_grad()
@@ -83,7 +96,7 @@ def evaluate_model(model, test_loader):
 
 def predict_single(model, input_data, scaler):
     model.eval()
-    input_data = scaler.transform([input_data]) 
+    input_data = scaler.transform([input_data])
     input_tensor = torch.tensor(input_data, dtype=torch.float32)
     with torch.no_grad():
         output = model(input_tensor)

@@ -55,5 +55,24 @@ Click open [/visualization](http://localhost:8000/visualization/) to see interac
 
 Model.py contains the code of logistic regression model.  
 
+#### Deep Learning Model (PyTorch)
 
+- **Data Processing**: Standardize and encode features to prepare data for neural network processing.
+- **Architecture**: Multi-layer architecture including three fully connected layers and a custom attention layer to enhance focus on critical features.
+- **Training**: Utilize the Adam optimizer and cross-entropy loss function, employing backpropagation for model optimization.
+- **Output**: Softmax function in the final layer provides probabilistic outcomes for disease presence.
+
+#### Logistic Regression Model
+
+- **Data Processing**: Similar preprocessing as the deep model to ensure compatibility with the logistic regression algorithm.
+- **Model Setup**: Utilize logistic regression to directly model the probability of heart disease based on linear combinations of input features.
+- **Training**: Employ cross-entropy loss and gradient descent for parameter estimation.
+- **Output**: Outputs a probability score indicating the likelihood of heart disease.
+
+#### Key Features
+
+- **Deep Learning Model**: Captures complex patterns and interactions through deep neural structures, enhanced by attention mechanisms for prioritizing informative features.
+- **Logistic Regression**: Offers a straightforward and computationally efficient approach, ideal for scenarios with limited data or computing resources.
+
+These models are designed to address various operational settings, ensuring flexibility in deployment and applicability in diverse healthcare environments.
 

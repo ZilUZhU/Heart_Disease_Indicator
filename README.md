@@ -25,10 +25,12 @@ Second visualization consists of two line charts. First, you fill out the questi
 
 Then, two line charts will be generated.
 
-<div style="display: grid; grid-template-columns: 1fr 1fr;">
-    <img src="assets/weight.png" alt="Probability with respect to weight" style="width: 45%; height: auto;">
-    <img src="assets/age.png" alt="Probability with respect to age" style="width: 45%; height: auto;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; align-items: end;">
+    <img src="assets/weight.png" alt="Probability with respect to weight" style="width: 100%; height: auto;">
+    <img src="assets/age.png" alt="Probability with respect to age" style="width: 100%; height: auto;">
 </div>
+
+
 
 
 ## Setting up the dataset

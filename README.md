@@ -47,15 +47,17 @@ Run regression_oversample.ipynb to load the data and train the model (You might 
 
 In the main directory, run `python http.server`.
 
-Front-end website will be hosted at `port 8000` by default. In any browser, open localhost [http://localhost:8000](http://localhost:8000).
+Front-end website will be hosted at `port 8000` by default.
 
 In another terminal, run `python server.py`
 
 Back-end server will be hosted at `port 8001` by default.
 
-Click open [/visualization](http://localhost:8000/visualization/) to see interactive visualization.
+In any browser, open [Heart_Disease_Indicator/visualization](http://localhost:8000/Heart_Disease_Indicator/visualization/) to see interactive visualization and submit questionnaire after the server.py is hosted.
 
-And submit questionnaire after the server.py is hosted.
+Note: To resolve the CORS (Cross-Origin Resource Sharing) conflict of our website due to our website and server are in different domains, you can use a browser extension in Chrome. One popular extension for handling CORS issues is the "Allow CORS: Access-Control-Allow-Origin" extension.
+
+
 
 ## About Model
 

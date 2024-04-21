@@ -35,11 +35,9 @@ Then, two line charts will be generated.
 
 ## Setting up the dataset
 
-Use `https://github.com/ZilUZhU/Heart_Disease_Indicator.git` to download the code.
+Using heart_2022_with_nans.csv or data2020.csv as model training and testing dataset.
 
-Unzip the data2020.csv.zip to get data2020.csv. (Or using heart_2022_with_nans.csv dataset)
-
-Run regression_oversample.ipynb to load the data and train the model
+Run regression_oversample.ipynb to load the data and train the model.
 
 ## Run the page
 
